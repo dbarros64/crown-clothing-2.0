@@ -1,5 +1,5 @@
 import React from 'react';
-import HomePage from './Pages/HomePage/HomePage';
+import HomePage from './Pages/HomePage/Homepage';
 import ShopPage from './Pages/ShopPage/ShopPage';
 import SignInAndSignUp from './Pages/SignInAndSignUp/SignInAndSignUp';
 import Header from './Components/Header/Header';
@@ -9,12 +9,15 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+
 import { setCurrentUser } from './Redux/user/user.actions';
 import { selectCurrentUser } from './Redux/user/user.selectors';
+
 
 import { auth, createUserProfileDocument } from './Firebase/Firebase.config';
 
 import './App.css';
+// import { selectCartItemsCount } from './Redux/cart/cart.selectors';
 
 
 
@@ -29,20 +32,17 @@ class App extends React.Component {
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth)
+        const userRef = await createUserProfileDocument(userAuth);
 
         userRef.onSnapshot(snapShot => {
           setCurrentUser({
-              id: snapShot.id,
-              ...snapShot.data()
+            id: snapShot.id,
+            ...snapShot.data()
           });
-          
         });
-
-      } else {
-        setCurrentUser(userAuth);
       }
 
+      setCurrentUser(userAuth);
     });
   }
 
