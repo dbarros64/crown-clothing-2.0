@@ -10,15 +10,13 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 
-import { setCurrentUser } from './Redux/user/user.actions';
 import { selectCurrentUser } from './Redux/user/user.selectors';
+import { checkUserSession } from './Redux/user/user.actions';
 
 
-import { auth, createUserProfileDocument } from './Firebase/Firebase.config';
 
 import './App.css';
 // import { selectCartItemsCount } from './Redux/cart/cart.selectors';
-
 
 
 
@@ -28,22 +26,10 @@ class App extends React.Component {
 
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { checkUserSession } = this.props;
 
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-
-        userRef.onSnapshot(snapShot => {
-          setCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data()
-          });
-        });
-      }
-
-      setCurrentUser(userAuth);
-    });
+    checkUserSession();
+  
   }
 
   componentWillUnmount() {
@@ -72,7 +58,9 @@ const mapStateToProps = createStructuredSelector ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  checkUserSession: () => dispatch(checkUserSession())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps) (App);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
