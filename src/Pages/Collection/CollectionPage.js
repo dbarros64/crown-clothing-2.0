@@ -5,8 +5,8 @@ import CollectionItem from '../../Components/CollectionItem/CollectionItem';
 
 import './CollectionPage.styles.scss';
 
-
 const CollectionPage = ({ collection }) => {
+
     const { title, items } = collection;
     return (
     <div className='collection-page'>
